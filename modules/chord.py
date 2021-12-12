@@ -23,23 +23,13 @@ class Chord:
     if chord_name.strip() == "":
         raise MyException(_("Not chord given"))
     self.name = chord_name[0].upper() + chord_name[1:]
-    if not self.name[0] in ['A','B','C','D','E','F','G']:
+    if not self.name[0] in tuple('ABCDEFG'):
         raise MyException(_("Chord not valid -> Root not valid: ") + self.name[0])
+    elif len(self.name) > 1:
+        pointer = 1 + self.name[1] in ('b', '#')
+        root = {'b' : -1, '#' : 1}.get(self.name[1], 0)
     else:
-      #print self.name
-      if len(self.name) > 1:
-        if self.name[1] == 'b':
-          pointer = 2
-          root = -1
-        elif self.name[1] == '#':
-          pointer = 2
-          root = 1
-        else:
-          pointer = 1
-          root = 0
-      else:
-        pointer = 0
-        root = 0
+        pointer = root = 0
       #First, we set the root
       if self.name[0] in 'GABCDEF':
         self.root = 55 + root + 'G A BC D EF'.index(self.name[0])
